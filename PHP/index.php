@@ -1,10 +1,61 @@
 <?php
 
+include_once 'BracketsParser.php';
+include_once 'Divisors.php';
 include_once 'Search.php';
 
 
-$testSearch = true;
+$testBracketsParser = true;
+$testDivisors = true;
+$testSearch = false;
 
+
+if ($testBracketsParser) {
+
+    $list = [
+        '"Это тестовый вариант проверки (задачи со скобками). И вот еще скобки: {[][()]}"',     // => true
+        '((a + b)/ c) - 2',                                                                     // => true
+        '"([строка)"',                                                                          // => true
+        '"(")',                                                                                 // => false
+        '"} {" ({[нет] ({})}ошибки)',                                                           // => true
+        '} { ({[это] ({})}ошибка',                                                              // => false
+    ];
+
+    echo 'Соответствие скобок в строках:' . PHP_EOL;
+    foreach ($list as $s) {
+        if (BracketsParser::verify($s)) {
+            echo "{$s} => соответствует" . PHP_EOL;
+        } else {
+            echo "{$s} => не соответствует" . PHP_EOL;
+        }
+    }
+
+}
+
+if ($testDivisors) {
+
+    $n = 600851475143;
+    $divisors = new Divisors($n);
+
+    echo 'Поиск простых делителей: ' . PHP_EOL;
+    echo implode(', ', $divisors->findPrimes()) . PHP_EOL;
+
+    $start = microtime(true);
+    $primes = [];
+    $naturals = $divisors->findNaturals();
+    $count = count($naturals);
+    for ($i = 0; $i < $count; $i++) {
+        if ($divisors->isPrime($naturals[$i])) {
+            $primes[] = $naturals[$i];
+        }
+    }
+    echo 'Поиск всех натуральных делителей с выборкой простых: ' . (microtime(true) - $start) . ' сек.' . PHP_EOL;
+
+    $start = microtime(true);
+    $divisors->findPrimes();
+    echo 'Поиск только простых делителей: ' . (microtime(true) - $start) . ' сек.' . PHP_EOL;
+
+}
 
 if ($testSearch) {
 
