@@ -11,10 +11,6 @@ class BracketsParser
     ];
     private const STRING_BRACKETS = [ '"', "'" ];
 
-    private array $stringBrackets;
-    private array $openBrackets;
-    private array $closeBrackets;
-
 
     /**
      * Проверяет соответствие скобок и кавычек в исходной строке
