@@ -1,140 +1,87 @@
 <?php
 
 
-class Matrix
+/**
+ * Инициализация матрицы
+ *
+ * @param int $cols
+ * @param int $rows
+ * @return array
+ */
+function __initMatrix(int $cols, int $rows): array
 {
-
-    private int $cols;
-    private int $rows;
-    private array $matrix = [];
-
-
-    public function __construct(int $cols, int $rows)
-    {
-        $this->setSize($cols, $rows);
+    $matrix = [];
+    if ($cols < 1 or $rows < 1) {
+        return $matrix;
     }
-
-    public function setSize(int $cols, int $rows)
-    {
-        $this->cols = $cols;
-        $this->rows = $rows;
-        $this->init();
-    }
-
-    public function getTable(): array
-    {
-        return $this->matrix;
-    }
-
-    /**
-     * Инициализация матрицы
-     */
-    private function init(): void
-    {
-        $this->matrix = [];
-        if ($this->cols < 1 or $this->rows < 1) {
-            return;
+    for ($i = 1; $i <= $rows; $i++) {
+        for ($j = 1; $j <= $cols; $j++) {
+            $matrix[$i][$j] = null;
         }
-        for ($i = 1; $i <= $this->rows; $i++) {
-            for ($j = 1; $j <= $this->cols; $j++) {
-                $this->matrix[$i][$j] = null;
+    }
+    return $matrix;
+}
+
+
+/**
+ * Возвращает матрицу, заполненную по спирали
+ *
+ * @param int $cols
+ * @param int $rows
+ * @return array
+ */
+function spiralMatrix(int $cols, int $rows): array
+{
+    if (empty($matrix = __initMatrix($cols, $rows))) {
+        return $matrix;
+    }
+    $size = $cols * $rows;
+    $dec = 0;
+    $n = 1;
+    while ($n <= $size) {
+        for ($i = 1 + $dec; $i < $rows - $dec; $i++) {
+            if (isset($matrix[$i][1 + $dec])) break;
+            $matrix[$i][1 + $dec] = $n++;
+        }
+        for ($i = 1 + $dec; $i < $cols - $dec; $i++) {
+            if (isset($matrix[$rows - $dec][$i])) break;
+            $matrix[$rows - $dec][$i] = $n++;
+        }
+        for ($i = $rows - $dec; $i > 1 + $dec; $i--) {
+            if (isset($matrix[$i][$cols - $dec])) break;
+            $matrix[$i][$cols - $dec] = $n++;
+        }
+        for ($i = $cols - $dec; $i > 1 + $dec; $i--) {
+            if (isset($matrix[1 + $dec][$i])) break;
+            $matrix[1 + $dec][$i] = $n++;
+        }
+        if (1 + $dec >= $cols - $dec and 1 + $dec >= $rows - $dec) {
+            $matrix[1 + $dec][1 + $dec] = $n++;
+        }
+        $dec++;
+    }
+    return $matrix;
+}
+
+
+$test = false;
+
+if ($test) {
+
+    $cols = 6;
+    $rows = 5;
+
+    $matrix = spiralMatrix($cols, $rows);
+    if (empty($matrix)) {
+        echo 'Выбран недопустимый размер матрицы'. PHP_EOL;
+    } else {
+        echo "Матрица [{$rows}, {$cols}], заполненная по спирали:" . PHP_EOL;
+        foreach ($matrix as $row) {
+            foreach ($row as $value) {
+                printf("%6d", $value);
             }
+            echo PHP_EOL;
         }
-    }
-
-    /**
-     * Возвращает матрицу, заполненную по спирали
-     */
-    public function fillSpiral(): void
-    {
-        $this->init();
-        if (empty($this->matrix)) {
-            return;
-        }
-        $first = 1;
-        $size = $this->cols * $this->rows;
-        $dec = 0;
-        $i = 1;
-        while ($i <= $size) {
-            // Первый столбец
-            $i = $this->fillColumn($i, $first + $dec, $first + $dec, $this->rows - $dec);
-            // Последняя строка
-            $i = $this->fillRow($i, $this->rows - $dec, $first + $dec, $this->cols - $dec);
-            // Последний столбец
-            $i = $this->fillColumn($i, $this->cols - $dec, $this->rows - $dec, $first + $dec, true);
-            // Первая строка
-            $i = $this->fillRow($i, $first + $dec, $this->cols - $dec, $first + $dec, true);
-            if ($first + $dec >= $this->cols - $dec and $first + $dec >= $this->rows - $dec) {
-                $this->setItem($i++, $first + $dec, $first + $dec);
-            }
-            $dec++;
-        }
-    }
-
-    /**
-     * Заполняет ячейку матрицы
-     *
-     * @param int $n
-     * @param int $x
-     * @param int $y
-     */
-    private function setItem(int $n, int $x, int $y): void
-    {
-        if (key_exists($y, $this->matrix) or key_exists($x, $this->matrix[$y])) {
-            $this->matrix[$y][$x] = $n;
-        }
-    }
-
-    /**
-     * Заполняет строку и возвращает следующий номер
-     *
-     * @param int $n
-     * @param int $row
-     * @param int $start
-     * @param int $stop
-     * @param bool $revers
-     * @return int
-     */
-    private function fillRow(int $n, int $row, int $start, int $stop, bool $revers = false): int
-    {
-        if ($revers) {
-            for ($i = $start; $i > $stop; $i--) {
-                if (isset($this->matrix[$row][$i])) break;
-                $this->matrix[$row][$i] = $n++;
-            }
-            return $n;
-        }
-        for ($i = $start; $i < $stop; $i++) {
-            if (isset($this->matrix[$row][$i])) break;
-            $this->matrix[$row][$i] = $n++;
-        }
-        return $n;
-    }
-
-    /**
-     * Заполняет столбец и возвращает следующий номер
-     *
-     * @param int $n
-     * @param int $column
-     * @param int $start
-     * @param int $stop
-     * @param bool $revers
-     * @return int
-     */
-    private function fillColumn(int $n, int $column, int $start, int $stop, bool $revers = false): int
-    {
-        if ($revers) {
-            for ($i = $start; $i > $stop; $i--) {
-                if (isset($this->matrix[$i][$column])) break;
-                $this->matrix[$i][$column] = $n++;
-            }
-            return $n;
-        }
-        for ($i = $start; $i < $stop; $i++) {
-            if (isset($this->matrix[$i][$column])) break;
-            $this->matrix[$i][$column] = $n++;
-        }
-        return $n;
     }
 
 }
