@@ -16,7 +16,7 @@ function binarySearch(int $item, array $list): int
         return -1;
     }
     while ($low <= $high) {
-        $middle = (int)(($high - $low) / 2 + $low);
+        $middle = floor(($high + $low) / 2);
         if ($list[$middle] == $item) {
             return $middle;
         }
