@@ -1,13 +1,73 @@
 <?php
 
+include_once 'Matrix.php';
 include_once 'BracketsParser.php';
 include_once 'Divisors.php';
 include_once 'Search.php';
 
 
-$testBracketsParser = true;
-$testDivisors = true;
+$testMatrix = true;
+$testBracketsParser = false;
+$testDivisors = false;
 $testSearch = false;
+
+
+/**
+ * П Р А К Т И Ч Е С К О Е   З А Д А Н И Е   № 2
+ */
+
+/**
+ * 1. Определить сложность следующих алгоритмов:
+ *    - Поиск элемента массива с известным индексом         => O(1)
+ *    - Дублирование одномерного массива через foreach      => O(n)
+ *    - Рекурсивная функция нахождения факториала числа     => O(n)
+ *    - Удаление элемента массива с известным индексом      => O(1)
+ */
+
+/**
+ * 2.Определить сложность следующих алгоритмов. Сколько произойдет итераций?
+ */
+
+// 1)
+// $n = 10000;
+// $array[] = [];
+// for ($i = 0; $i < $n; $i++) {                            // n-итераций
+//     for ($j = 1; $j < $n; $j *= 2) {                     // log(n)-итераций
+//         $array[$i][$j]= true;
+//     }
+// }
+//                                                          Сложность: O(n log(n))
+
+// 2)
+// $n = 10000;
+// $array[] = [];
+// for ($i = 0; $i < $n; $i += 2) {                         // n/2-итераций
+//     for ($j = $i; $j < $n; $j++) {                       // n/2-итераций
+//         $array[$i][$j]= true;
+//     }
+// }
+//                                                          Сложность: O(n)
+
+if ($testMatrix) {
+
+    $cols = 5;
+    $rows = 4;
+
+    $matrix = new Matrix($cols, $rows);
+    $matrix->fillSpiral();
+    if (empty($matrix->getTable())) {
+        echo 'Выбран недопустимый размер матрицы'. PHP_EOL;
+    } else {
+        echo "Матрица [{$rows}, {$cols}], заполненная по спирали:" . PHP_EOL;
+        foreach ($matrix->getTable() as $row) {
+            foreach ($row as $value) {
+                printf("%6d", $value);
+            }
+            echo PHP_EOL;
+        }
+    }
+
+}
 
 
 if ($testBracketsParser) {
@@ -31,6 +91,7 @@ if ($testBracketsParser) {
     }
 
 }
+
 
 if ($testDivisors) {
 
@@ -56,6 +117,7 @@ if ($testDivisors) {
     echo 'Поиск только простых делителей: ' . (microtime(true) - $start) . ' сек.' . PHP_EOL;
 
 }
+
 
 if ($testSearch) {
 
