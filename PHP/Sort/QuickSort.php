@@ -8,7 +8,7 @@
  * @param int $j
  * @param array $list
  */
-function __swap(int $i, int $j, array &$list): void
+function __swapQuick(int $i, int $j, array &$list): void
 {
     $temp = $list[$i];
     $list[$i] = $list[$j];
@@ -37,7 +37,7 @@ function __partition(int $start, int $end, array &$list): int
         if ($start >= $end) {
             return $end;
         }
-        __swap($start, $end, $list);
+        __swapQuick($start, $end, $list);
         $start++;
         $end--;
     }

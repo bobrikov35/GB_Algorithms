@@ -8,7 +8,7 @@
  * @param int $j
  * @param array $list
  */
-function __swap(int $i, int $j, array &$list): void
+function __swapHeap(int $i, int $j, array &$list): void
 {
     $temp = $list[$i];
     $list[$i] = $list[$j];
@@ -35,7 +35,7 @@ function __heapify(array &$list, int $size, int $root): void
         $large = $rightChild;
     }
     if ($large != $root) {
-        __swap($root, $large, $list);
+        __swapHeap($root, $large, $list);
         __heapify($list, $size, $large);
     }
 }
@@ -53,7 +53,7 @@ function heapSort(array &$list): void
         __heapify($list, $count, $i);
     }
     for ($i = $count - 1; $i > 0; $i--) {
-        __swap(0, $i, $list);
+        __swapHeap(0, $i, $list);
         __heapify($list, $i - 1, 0);
     }
 }

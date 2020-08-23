@@ -8,7 +8,7 @@
  * @param int $j
  * @param array $list
  */
-function __swap(int $i, int $j, array &$list): void
+function __swapBubble(int $i, int $j, array &$list): void
 {
     $temp = $list[$i];
     $list[$i] = $list[$j];
@@ -25,14 +25,16 @@ function bubbleSort(array &$list): void
 {
     $count = count($list);
     $swapped = true;
+    $k = 1;
     while ($swapped) {
         $swapped = false;
-        for ($i = 0; $i < $count - 1; $i++) {
+        for ($i = 0; $i < $count - $k; $i++) {
             if ($list[$i] > $list[$i + 1]) {
-                __swap($i, $i + 1, $list);
+                __swapBubble($i, $i + 1, $list);
                 $swapped = true;
             }
         }
+        $k++;
     }
 }
 

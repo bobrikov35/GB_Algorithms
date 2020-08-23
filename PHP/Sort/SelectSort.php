@@ -8,7 +8,7 @@
  * @param int $j
  * @param array $list
  */
-function __swap(int $i, int $j, array &$list): void
+function __swapSelect(int $i, int $j, array &$list): void
 {
     $temp = $list[$i];
     $list[$i] = $list[$j];
@@ -32,7 +32,7 @@ function selectSort(array &$list): void
             }
         }
         if ($lowIndex != $i) {
-            __swap($i, $lowIndex, $list);
+            __swapSelect($i, $lowIndex, $list);
         }
     }
 }
