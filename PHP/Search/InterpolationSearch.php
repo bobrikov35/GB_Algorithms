@@ -2,21 +2,24 @@
 
 
 /**
- * Бинарный поиск
+ * Интерполяционный поиск
  *
  * @param array $sortedlist - отсортирован по возрастанию
  * @param int $item
  * @return int
  */
-function binarySearch(int $item, array $sortedlist): int
+function interpolationSearch(int $item, array $sortedlist): int
 {
     $low = 0;
     $high = count($sortedlist) - 1;
     if ($item > $sortedlist[$high] or $item < $sortedlist[$low]) {
         return -1;
     }
-    while ($low <= $high) {
-        $middle = floor(($high + $low) / 2);
+    while ($sortedlist[$low] < $item and $sortedlist[$high] > $item) {
+        if ($sortedlist[$low] == $sortedlist[$high]) {
+            break;
+        }
+        $middle = $low + (($high - $low) * ($item - $sortedlist[$low])) / ($sortedlist[$high] - $sortedlist[$low]);
         if ($sortedlist[$middle] == $item) {
             return $middle;
         }
@@ -25,6 +28,12 @@ function binarySearch(int $item, array $sortedlist): int
         } else {
             $low = $middle + 1;
         }
+    }
+    if ($sortedlist[$low] == $item) {
+        return $low;
+    }
+    if ($sortedlist[$high] == $item) {
+        return $high;
     }
     return -1;
 }
@@ -43,7 +52,7 @@ if ($test) {
         }
     }
     $item = random_int(1,  $n);
-    $find = binarySearch($item, $list);
+    $find = interpolationSearch($item, $list);
     if ($find >= 0) {
         echo "Число {$item} в массиве [" . min($list) . ", " . max($list) . "] находится на позиции {$find}" . PHP_EOL;
     } else {
