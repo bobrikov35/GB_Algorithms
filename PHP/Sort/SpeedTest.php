@@ -1,6 +1,7 @@
 <?php
 
 include_once 'BubbleSort.php';
+include_once 'DictionarySort.php';
 include_once 'HeapSort.php';
 include_once 'InsertSort.php';
 include_once 'MergeSort.php';
@@ -42,8 +43,8 @@ function __time($start, $end = null): float
 
 
 $n = 1000;
-$loops = 1;
-$randList = __randArray($n, 1, $n * $n);
+$loops = 10;
+$randList = __randArray($n, 1, $n);
 $worseList = __worseArray($n);
 
 
@@ -201,6 +202,29 @@ for ($i = 0; $i < $loops; $i++) {
     $temp = $worseList;
     $start = microtime(true);
     bubbleSort($temp);
+    $times[] = __time($start);
+}
+printf('%10f сек.' . PHP_EOL, min($times));
+
+
+echo 'Сортировка со словарем:  ';
+
+echo '    1. Случайный массив: ';
+$times = [];
+for ($i = 0; $i < $loops; $i++) {
+    $temp = $randList;
+    $start = microtime(true);
+    dictionarySort($temp);
+    $times[] = __time($start);
+}
+printf('%10f сек.', min($times));
+
+echo '    2. Худший массив: ';
+$times = [];
+for ($i = 0; $i < $loops; $i++) {
+    $temp = $worseList;
+    $start = microtime(true);
+    dictionarySort($temp);
     $times[] = __time($start);
 }
 printf('%10f сек.', min($times));
