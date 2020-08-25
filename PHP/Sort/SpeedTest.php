@@ -57,7 +57,7 @@ function checkSortedArray(array $sortedList): bool
 
 
 $n = 1024;
-$loops = 10;
+$loops = 3;
 $times = [];
 
 for ($i = 0; $i < $loops; $i++) {
@@ -79,8 +79,9 @@ for ($i = 0; $i < $loops; $i++) {
     if (!checkSortedArray($temp)) {
         echo 'QUICK: ошибка!';
     }
+    $temp = $randList;
     $start = microtime(true);
-    $temp = mergeSort($randList);
+    mergeSort($temp);
     $times['merge::rand'][] = timeIt($start);
     if (!checkSortedArray($temp)) {
         echo 'MERGE: ошибка!';
@@ -147,8 +148,9 @@ for ($i = 0; $i < $loops; $i++) {
     $start = microtime(true);
     quickSort($temp);
     $times['quick::worse'][] = timeIt($start);
+    $temp = $worseList;
     $start = microtime(true);
-    mergeSort($worseList);
+    mergeSort($temp);
     $times['merge::worse'][] = timeIt($start);
     $temp = $worseList;
     $start = microtime(true);

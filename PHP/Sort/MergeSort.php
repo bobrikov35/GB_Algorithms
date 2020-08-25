@@ -2,38 +2,57 @@
 
 
 /**
- * Слияние двух массивов
+ * Слияние двух частей массива
  *
- * @param array $leftList
- * @param array $rightList
- * @return array
+ * @param array &$list
+ * @param int $start
+ * @param int $separator
+ * @param int $end
  */
-function __merge(array $leftList, array $rightList): array
+function __merge(array &$list, int $start, int $end, int $separator): void
 {
-    $sortedList = [];
+    $rightIndex = $separator;
+    $rightEnd = $end;
+    $left = array_slice($list, $start, $separator - $start);
     $leftIndex = 0;
-    $rightIndex = 0;
-    $leftCount = count($leftList);
-    $rightCount = count($rightList);
-    $count = $leftCount + $rightCount;
-    for ($i = 0; $i < $count; $i++) {
-        if ($leftIndex < $leftCount and $rightIndex < $rightCount) {
-            if ($leftList[$leftIndex] <= $rightList[$rightIndex]) {
-                $sortedList[] = $leftList[$leftIndex];
+    $leftEnd = count($left) - 1;
+    for ($i = $start; $i <= $end; $i++) {
+        if ($leftIndex <= $leftEnd and $rightIndex <= $rightEnd) {
+            if ($left[$leftIndex] <= $list[$rightIndex]) {
+                $list[$i] = $left[$leftIndex];
                 $leftIndex++;
             } else {
-                $sortedList[] = $rightList[$rightIndex];
+                $list[$i] = $list[$rightIndex];
                 $rightIndex++;
             }
-        } elseif ($leftIndex == $leftCount) {
-            $sortedList[] = $rightList[$rightIndex];
-            $rightIndex++;
-        } elseif ($rightIndex == $rightCount) {
-            $sortedList[] = $leftList[$leftIndex];
+        } elseif ($rightIndex > $rightEnd) {
+            $list[$i] = $left[$leftIndex];
             $leftIndex++;
         }
     }
-    return $sortedList;
+}
+
+
+/**
+ * Сортировка слиянием с диапазоном (рекурсивная)
+ *
+ * @param array $list
+ * @param int $start
+ * @param int $end
+ */
+function __mergeSort(array &$list, int $start, int $end): void
+{
+    $count = $end - $start + 1;
+    if ($count < 3) {
+        if ($count == 2 and $list[$start] > $list[$end]) {
+            list($list[$start], $list[$end]) = array($list[$end], $list[$start]);
+        }
+        return;
+    }
+    $middle = (int)($start + $count / 2);
+    __mergeSort($list, $start, $middle - 1);
+    __mergeSort($list, $middle, $end);
+    __merge($list, $start, $end, $middle);
 }
 
 
@@ -41,19 +60,10 @@ function __merge(array $leftList, array $rightList): array
  * Сортировка слиянием
  *
  * @param array $list
- * @return array
  */
-function mergeSort(array $list): array
+function mergeSort(array &$list): void
 {
-    $count = count($list);
-    if ($count < 3) {
-        if ($count == 2 and $list[0] > $list[1]) {
-            return [$list[1], $list[0]];
-        }
-        return $list;
-    }
-    $middle = (int)($count / 2);
-    return __merge(mergeSort(array_slice($list, 0, $middle)), mergeSort(array_slice($list, $middle)));
+    __mergeSort($list, 0, count($list) - 1);
 }
 
 
@@ -67,7 +77,7 @@ if ($test) {
         $list[] = random_int(1, $n);
     }
     echo 'Список до сортировки: ' . implode(', ', $list) . PHP_EOL;
-    $sortedList = mergeSort($list);
-    echo 'Список после сортировки: ' . implode(', ', $sortedList);
+    mergeSort($list);
+    echo 'Список после сортировки: ' . implode(', ', $list);
 
 }

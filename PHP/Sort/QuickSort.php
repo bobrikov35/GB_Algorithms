@@ -2,7 +2,7 @@
 
 
 /**
- * Возвращает "разделитель"
+ * Возвращает разделитель массива
  *
  * @param int $start
  * @param int $end
@@ -28,7 +28,14 @@ function __partition(int $start, int $end, array &$list): int
     }
 }
 
-function __quickSort(&$list, $start, $end)
+/**
+ * Быстрый поиск с диапазоном (рекурсивная)
+ *
+ * @param array $list
+ * @param int $start
+ * @param int $end
+ */
+function __quickSort(array &$list, int $start, int $end): void
 {
     if ($start < $end) {
         $separator = __partition($start, $end, $list);
@@ -38,7 +45,12 @@ function __quickSort(&$list, $start, $end)
 }
 
 
-function quickSort(&$list)
+/**
+ * Быстрый поиск
+ *
+ * @param array $list
+ */
+function quickSort(array &$list): void
 {
     __quickSort($list, 0, count($list) - 1);
 }
