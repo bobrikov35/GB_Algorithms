@@ -2,21 +2,6 @@
 
 
 /**
- * Меняет указанные элементы массива местами
- *
- * @param int $i
- * @param int $j
- * @param array $list
- */
-function __swapHeap(int $i, int $j, array &$list): void
-{
-    $temp = $list[$i];
-    $list[$i] = $list[$j];
-    $list[$j] = $temp;
-}
-
-
-/**
  * Сортирующее дерево
  *
  * @param array $list
@@ -35,7 +20,7 @@ function __heapify(array &$list, int $size, int $root): void
         $large = $rightChild;
     }
     if ($large != $root) {
-        __swapHeap($root, $large, $list);
+        list($list[$root], $list[$large]) = array($list[$large], $list[$root]);
         __heapify($list, $size, $large);
     }
 }
@@ -53,7 +38,7 @@ function heapSort(array &$list): void
         __heapify($list, $count, $i);
     }
     for ($i = $count - 1; $i > 0; $i--) {
-        __swapHeap(0, $i, $list);
+        list($list[0], $list[$i]) = array($list[$i], $list[0]);
         __heapify($list, $i - 1, 0);
     }
 }
@@ -66,10 +51,10 @@ if ($test) {
     $n = 32;
     $list = [];
     for ($i = 1; $i <= $n; $i++) {
-        $list[] = random_int(1, 32);
+        $list[] = random_int(1, $n);
     }
     echo 'Список до сортировки: ' . implode(', ', $list) . PHP_EOL;
     heapSort($list);
-    echo 'Список после сортировки: ' . implode(', ', $list) . PHP_EOL;
+    echo 'Список после сортировки: ' . implode(', ', $list);
 
 }

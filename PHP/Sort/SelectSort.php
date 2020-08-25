@@ -2,21 +2,6 @@
 
 
 /**
- * Меняет указанные элементы массива местами
- *
- * @param int $i
- * @param int $j
- * @param array $list
- */
-function __swapSelect(int $i, int $j, array &$list): void
-{
-    $temp = $list[$i];
-    $list[$i] = $list[$j];
-    $list[$j] = $temp;
-}
-
-
-/**
  * Сортировка выбором
  *
  * @param array $list
@@ -32,7 +17,7 @@ function selectSort(array &$list): void
             }
         }
         if ($lowIndex != $i) {
-            __swapSelect($i, $lowIndex, $list);
+            list($list[$i], $list[$lowIndex]) = array($list[$lowIndex], $list[$i]);
         }
     }
 }
@@ -45,10 +30,10 @@ if ($test) {
     $n = 32;
     $list = [];
     for ($i = 1; $i <= $n; $i++) {
-        $list[] = random_int(1, 32);
+        $list[] = random_int(1, $n);
     }
     echo 'Список до сортировки: ' . implode(', ', $list) . PHP_EOL;
     selectSort($list);
-    echo 'Список после сортировки: ' . implode(', ', $list) . PHP_EOL;
+    echo 'Список после сортировки: ' . implode(', ', $list);
 
 }

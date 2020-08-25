@@ -2,21 +2,6 @@
 
 
 /**
- * Меняет указанные элементы массива местами
- *
- * @param int $i
- * @param int $j
- * @param array $list
- */
-function __swapQuick(int $i, int $j, array &$list): void
-{
-    $temp = $list[$i];
-    $list[$i] = $list[$j];
-    $list[$j] = $temp;
-}
-
-
-/**
  * Возвращает "разделитель"
  *
  * @param int $start
@@ -37,7 +22,7 @@ function __partition(int $start, int $end, array &$list): int
         if ($start >= $end) {
             return $end;
         }
-        __swapQuick($start, $end, $list);
+        list($list[$start], $list[$end]) = array($list[$end], $list[$start]);
         $start++;
         $end--;
     }
@@ -66,10 +51,10 @@ if ($test) {
     $n = 32;
     $list = [];
     for ($i = 1; $i <= $n; $i++) {
-        $list[] = random_int(1, 32);
+        $list[] = random_int(1, $n);
     }
     echo 'Список до сортировки: ' . implode(', ', $list) . PHP_EOL;
     quickSort($list);
-    echo 'Список после сортировки: ' . implode(', ', $list) . PHP_EOL;
+    echo 'Список после сортировки: ' . implode(', ', $list);
 
 }

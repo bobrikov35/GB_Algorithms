@@ -45,13 +45,15 @@ function __merge(array $leftList, array $rightList): array
  */
 function mergeSort(array $list): array
 {
-    if (count($list) <= 1) {
+    $count = count($list);
+    if ($count < 3) {
+        if ($count == 2 and $list[0] > $list[1]) {
+            return [$list[1], $list[0]];
+        }
         return $list;
     }
-    $middle = (int)(count($list) / 2);
-    $leftList = mergeSort(array_slice($list, 0, $middle));
-    $rightList = mergeSort(array_slice($list, $middle));
-    return __merge($leftList, $rightList);
+    $middle = (int)($count / 2);
+    return __merge(mergeSort(array_slice($list, 0, $middle)), mergeSort(array_slice($list, $middle)));
 }
 
 
@@ -62,10 +64,10 @@ if ($test) {
     $n = 32;
     $list = [];
     for ($i = 1; $i <= $n; $i++) {
-        $list[] = random_int(1, 32);
+        $list[] = random_int(1, $n);
     }
     echo 'Список до сортировки: ' . implode(', ', $list) . PHP_EOL;
     $sortedList = mergeSort($list);
-    echo 'Список после сортировки: ' . implode(', ', $sortedList) . PHP_EOL;
+    echo 'Список после сортировки: ' . implode(', ', $sortedList);
 
 }
